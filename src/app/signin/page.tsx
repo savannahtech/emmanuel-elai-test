@@ -1,61 +1,33 @@
-import Input from "@/components/Form/Input";
-import FloatingLabelInput from "@/components/Form/Input";
-import { TextInput } from "flowbite-react";
-
+import SignIn, { Response } from "@/components/SignIn/SignIn";
+import { prisma } from "@/db";
+import { User } from "@prisma/client";
 import React from "react";
+import * as bcryptjs from "bcryptjs";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+  const handleSubmit = async (
+    data: Pick<User, "email" | "password">
+  ): Promise<Response> => {
+    "use server";
+    const user = await prisma.user.findUnique({
+      where: {
+        email: data.email,
+      },
+    });
+    if (!user)
+      return {
+        ...{ id: "", email: "", password: "", username: "" },
+        error: "User Does Not Exits",
+      };
+    const isMatched = await bcryptjs.compare(data.password, user.password);
+    if (!isMatched) return { ...user, error: "Incorrect Password" };
+    return { ...user, error: "" };
+  };
+
   return (
-    <div className="main___1o3Io pushFooterOutOfView___3sEnC">
-      <div className="sb-contentColumn sb-global-gutters mx-auto sb-contentColumn--medium py4 md-py7">
-        <div className="sb-contentColumn__inner">
-          <h1
-            className="sb-heading text-lg text-bold text-center mb2"
-            tabIndex={-1}
-          >
-            Sign in or create an account
-          </h1>
-        </div>
-      </div>
-
-      <div
-        className="sb-contentColumn sb-global-gutters mx-auto sb-contentColumn--medium mb7 sb-animator-fade-appear-done sb-animator-fade-enter-done"
-        style={{ transitionDelay: "100ms" }}
-      >
-        <div className="sb-contentColumn__inner column___16YAQ">
-          <div className="sm-pt0 md-p5">
-            <form action="">
-              <p>
-                <span className="color-greenAccent">*</span>
-                indicates required field
-              </p>
-              <div className="sb-fieldBase overflow-hidden mt3 mb2">
-                {<Input name="email" label="Username or Email" />}
-              </div>
-              <div className="sb-fieldBase overflow-hidden mt3 mb2">
-                {<Input name="password" label="Password" />}
-              </div>
-
-              <div className="flex flex-column items-end">
-                <div
-                  className="visible sb-animator-fadeGrow-appear-done sb-animator-fadeGrow-enter-done"
-                  style={{ transitionDelay: "100ms" }}
-                >
-                  <button
-                    className="sb-frap sb-frap--centerSVG"
-                    data-e2e="signInButton"
-                    data-ga="event: account-signin-submit-click; sectionName: SignIn; inputName: Sign-In"
-                    data-ga-event="click"
-                    type="submit"
-                  >
-                    Sign in
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+    <div>
+      <SignIn handleSubmit={handleSubmit} />
     </div>
   );
 };

@@ -35,7 +35,7 @@ const Footer = async () => {
   //   }
   //   createFooter();
   const footers = await getFooters();
-  console.log({ length: footers.length, footers });
+
   return (
     <div>
       <footer className="py4 relative footer_footer__aZrs8">

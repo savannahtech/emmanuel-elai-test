@@ -7,6 +7,7 @@ import { Twirl as Hamburger } from "hamburger-react";
 import { Transition } from "@headlessui/react";
 const NavBar = ({ isAuth }: { isAuth?: boolean }) => {
   const [isOpen, setOpen] = useState(false);
+  const token = sessionStorage.getItem("userToken");
 
   return (
     <nav className="px-[40px] min-h-[100px] flex justify-between items-center sb-globalNav__nav bg-white">
@@ -42,18 +43,29 @@ const NavBar = ({ isAuth }: { isAuth?: boolean }) => {
                   Find a store
                 </Link>
               </div>
-              <Link
-                className="sb-button sb-button--default sb-button--black mr3"
-                href="/signin"
-              >
-                Sign in
-              </Link>
-              <Link
-                className="sb-button sb-button--positive sb-button--black"
-                href="https://www.starbucks.com/account/create"
-              >
-                Join now
-              </Link>
+              {!token ? (
+                <>
+                  <Link
+                    className="sb-button sb-button--default sb-button--black mr3"
+                    href="/signin"
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    className="sb-button sb-button--positive sb-button--black"
+                    href="/signup"
+                  >
+                    Join now
+                  </Link>
+                </>
+              ) : (
+                <Link
+                  className="sb-button sb-button--positive sb-button--black"
+                  href="/"
+                >
+                  Profile
+                </Link>
+              )}
             </div>
           </div>
           <div className="block sm:hidden">
@@ -86,18 +98,29 @@ const NavBar = ({ isAuth }: { isAuth?: boolean }) => {
             </div>
             <hr aria-hidden="true" className="sb-rule pt3 pb5 px5"></hr>
             <div className="px-4">
-              <Link
-                className="sb-button sb-button--default sb-button--black mr3"
-                href="/signin"
-              >
-                Sign in
-              </Link>
-              <Link
-                className="sb-button sb-button--positive sb-button--black"
-                href="https://www.starbucks.com/account/create"
-              >
-                Join now
-              </Link>
+              {token ? (
+                <>
+                  <Link
+                    className="sb-button sb-button--default sb-button--black mr3"
+                    href="/signin"
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    className="sb-button sb-button--positive sb-button--black"
+                    href="https://www.starbucks.com/account/create"
+                  >
+                    Join now
+                  </Link>
+                </>
+              ) : (
+                <Link
+                  className="sb-button sb-button--positive sb-button--black"
+                  href="/"
+                >
+                  Profile
+                </Link>
+              )}
             </div>
             <div className="flex px-4 mt-6 ">
               <Link

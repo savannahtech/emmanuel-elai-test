@@ -3,7 +3,6 @@ import Hero from "@/components/Home/Hero";
 import NavBar from "@/components/navigation/NavBar";
 import { prisma } from "@/db";
 import { Banner } from "@prisma/client";
-import { useEffect } from "react";
 
 export default async function Home() {
   async function createBanner(data: Omit<Banner, "id">[]) {

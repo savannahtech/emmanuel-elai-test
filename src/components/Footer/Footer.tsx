@@ -1,143 +1,51 @@
-"use client";
-
+import { prisma } from "@/db";
 import Link from "next/link";
 import React from "react";
 
-const Footer = () => {
-  const links = {
-    aboutUs: {
-      name: "About Us",
-      data: [
-        {
-          name: "Our Company",
-          link: "https://www.starbucks.com/about-us/",
-        },
-        {
-          name: "Our Coffee",
-          link: "https://www.starbucks.com/about-us/",
-        },
-        {
-          name: "Stories and News ",
-          link: "https://www.starbucks.com/about-us/",
-        },
-        {
-          name: "Starbucks Archive",
-          link: "https://www.starbucks.com/about-us/",
-        },
-        {
-          name: "Investor Relations",
-          link: "https://www.starbucks.com/about-us/",
-        },
-        {
-          name: "Customer Service",
-          link: "https://www.starbucks.com/about-us/",
-        },
-      ],
-    },
-    careers: {
-      name: "Careers",
-      data: [
-        {
-          name: "Culture and Values",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "Inclusion, Diversity, and Equity",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "College Achievement Plan",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "Alumni Community",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "U.S. Careers",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "International Careers",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-      ],
-    },
-    socialImpact: {
-      name: "Social Impact",
-      data: [
-        {
-          name: "People",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "Planet",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "Environmental and social Impact Reporting",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-      ],
-    },
-    forBusinessPartners: {
-      name: "For Business Partners",
-      data: [
-        {
-          name: "Landlord Support Center",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "Suppliers",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "Corporate Gift Card Sales",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "Office and FoodService Coffee",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-      ],
-    },
-    orderAndPickUp: {
-      name: "Order And Pickup",
-      data: [
-        {
-          name: "Order on the App",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "Order on the Web",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "Delivery",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-        {
-          name: "Order and Pick Up Options",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-
-        {
-          name: "Explore and Find Coffee for Home",
-          link: "https://www.starbucks.com/careers/working-at-starbucks/culture-and-values/",
-        },
-      ],
-    },
-  };
+const Footer = async () => {
+  async function getFooters() {
+    const footers = await prisma.footer.findMany({
+      include: {
+        footerData: true,
+      },
+    });
+    return footers;
+  }
+  //   async function createFooter() {
+  //     const linkArr = Object.values(links);
+  //     const footers = await getFooters();
+  //     if (footers.length == 0)
+  //       for (let i = 0; i < linkArr.length; i++) {
+  //         const link = linkArr[i];
+  //         const footer = await prisma.footer.create({
+  //           data: {
+  //             name: link.name,
+  //           },
+  //         });
+  //         for (const item of link.data) {
+  //           await prisma.footerData.create({
+  //             data: {
+  //               name: item.name,
+  //               link: item.link,
+  //               footerId: footer.id,
+  //             },
+  //           });
+  //         }
+  //       }
+  //   }
+  //   createFooter();
+  const footers = await getFooters();
+  console.log({ length: footers.length, footers });
   return (
     <div>
       <footer className="py4 relative footer_footer__aZrs8">
         <main className="sb-global-gutters sb-global-gutters--maxWidthLayout">
           <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-y-8 gap-x-4 py-10">
-            {Object.values(links).map((link, id) => (
+            {footers.map((link, id) => (
               <div key={id}>
                 <h2 className="sb-heading text-sm mb4">{link.name}</h2>
                 <ul className="inline-block">
-                  {link.data.map((link, id) => (
+                  {link.footerData.map((link, id) => (
                     <li key={id}>
                       <Link
                         className="block mb2 py2 text-noUnderline sb-footer-primaryLinks null-pr0"

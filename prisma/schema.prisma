@@ -22,3 +22,17 @@ model Banner {
   backgroundColor String
   textColor       String
 }
+
+model Footer {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  footerData FooterData[]
+}
+
+model FooterData {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  link     String
+  footerId String @db.ObjectId
+  footer   Footer @relation(fields: [footerId], references: [id])
+}

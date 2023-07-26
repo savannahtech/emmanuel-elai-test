@@ -30,7 +30,7 @@ const SignIn = ({
     if (user && user?.error) {
       return toast.error(user.error);
     }
-    console.log(user);
+
     sessionStorage.setItem("userToken", user.id);
     toast.success("User Logged In");
     router.push("/");

@@ -21,7 +21,7 @@ async function getNoOfClicks(data: Banner) {
 async function increaseNoOfClicks(data: Banner) {
   "use server";
   let click = await getNoOfClicks(data);
-  console.log({ click });
+
   if (!click)
     await prisma.clickedButton.create({
       data: {
@@ -52,7 +52,6 @@ const Hero = async ({
   position?: "left" | "right";
   data: Banner;
 }) => {
-  // console.log(await getNoOfClicks(data));
   return <HeroItem {...{ data, position, increaseNoOfClicks }} />;
 };
 
